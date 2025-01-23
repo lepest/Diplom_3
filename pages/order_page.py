@@ -8,9 +8,9 @@ class OrderPage(BasePage):
     @allure.step('Всплывающее окно с деталями заказа')
     def popup_window_data_ingredient(self):
         self.find_element_with_wait(TestOrderPageLocators.ELEMENTS_MAIN_PAGE)
-        self.click_element_with_wait(TestOrderPageLocators.ORDER_FEED)
+        self.waiting_for_element(TestOrderPageLocators.ORDER_FEED)
         self.find_element_with_wait(TestOrderPageLocators.HEADER_ORDER_FEED)
-        self.click_element_with_wait(TestOrderPageLocators.INGREDIENT_ORDER_FEED)
+        self.waiting_for_element(TestOrderPageLocators.INGREDIENT_ORDER_FEED)
         try:
             self.find_element_with_wait(TestOrderPageLocators.WINDOW_DATA_INGREDIENT)
             return True
@@ -19,14 +19,13 @@ class OrderPage(BasePage):
 
     @allure.step('Заказы пользователя из раздела "История заказов" отображаются на странице "Лента заказов"')
     def list_user_orders_in_order_feed(self):
-        self.find_element_with_wait(TestOrderPageLocators.LIST_BUTTONS_PERSONAL_ACCOUNT)
         self.waiting_for_element(TestOrderPageLocators.BUTTON_HISTORY_ORDERS)
         self.find_element_with_wait(TestOrderPageLocators.LIST_USER_ORDERS)
         self.scroll_to_element(TestOrderPageLocators.NUMBER_USER_ORDER)
         number_user_order = self.get_text_from_element(TestOrderPageLocators.NUMBER_USER_ORDER)
-        self.click_element_with_wait(TestOrderPageLocators.ORDER_FEED)
+        self.waiting_for_element(TestOrderPageLocators.ORDER_FEED)
         self.find_element_with_wait(TestOrderPageLocators.LIST_ORDERS)
-        for number in range(1, 100):
+        for number in range(1, 1000):
             order_locator = self.get_format_locators(TestOrderPageLocators.NUMBERS_ORDERS, number)
             self.scroll_to_element(order_locator)
             order = self.get_text_from_element(order_locator)
@@ -38,7 +37,7 @@ class OrderPage(BasePage):
     @allure.step('При создании нового заказа счётчик "Выполнено за всё время" увеличивается')
     def counter_completed_for_all_time(self):
         self.waiting_for_element(TestOrderPageLocators.ORDER_FEED)
-        self.find_element_with_wait(TestOrderPageLocators.COUNTER_COMPLETED_FOR_ALL_TIME)
+        self.find_element_with_wait(TestOrderPageLocators.LIST_ORDERS)
         counter = self.get_text_from_element(TestOrderPageLocators.COUNTER_COMPLETED_FOR_ALL_TIME)
         return counter
 
@@ -46,7 +45,7 @@ class OrderPage(BasePage):
     def counter_completed_for_today(self):
         self.waiting_for_element(TestOrderPageLocators.ORDER_FEED)
         self.find_element_with_wait(TestOrderPageLocators.LIST_ORDERS)
-        self.find_element_with_wait(TestOrderPageLocators.COUNTER_COMPLETED_FOR_ALL_TIME)
+        self.find_element_with_wait(TestOrderPageLocators.COUNTER_COMPLETED_FOR_TODAY)
         counter = self.get_text_from_element(TestOrderPageLocators.COUNTER_COMPLETED_FOR_TODAY)
         return counter
 

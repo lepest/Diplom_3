@@ -2,11 +2,13 @@ import allure
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions
 from selenium.webdriver import ActionChains
+from data import TestUrl
 
 class BasePage:
 
     def __init__(self, driver):
         self.driver = driver
+        driver.get(TestUrl.main_page_url)
 
     @allure.step('Поиск элемента с ожиданием')
     def find_element_with_wait(self, locator):
@@ -53,7 +55,7 @@ class BasePage:
 
     @allure.step('Ожидание элемента')
     def waiting_for_element(self, locator):
-        WebDriverWait(self.driver, 3).until(expected_conditions.element_to_be_clickable(locator))
+        WebDriverWait(self.driver, 5).until(expected_conditions.element_to_be_clickable(locator))
         element = self.driver.find_element(*locator)
         self.driver.execute_script("arguments[0].click();", element)
 
@@ -70,9 +72,9 @@ class BasePage:
         action_chains.drag_and_drop(element, target).perform()
 
     @allure.step('Ожидание исчезновения элемента')
-    def wait_element_disappearing(self, locator):
+    def wait_element_disappearing(self, locator, text):
         self.driver.find_element(*locator)
-        WebDriverWait(self.driver, 5).until_not(expected_conditions.text_to_be_present_in_element(locator, '9999'))
+        WebDriverWait(self.driver, 5).until_not(expected_conditions.text_to_be_present_in_element(locator, text))
         element = self.driver.find_element(*locator)
         return element.text
 
